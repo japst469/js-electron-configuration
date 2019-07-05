@@ -1,28 +1,41 @@
+const fs = require( 'fs' );
+
+var args = process.argv;
+
+var buffer = eval( fs.readFileSync('elements.js'));
+
 var ec = function( element ){
-  var els;
-  var db = elements;
-  if( element === undefined ) return "Help me help you; give me something to go on. i.e. 'C', or 'oxygen' or 23";
-  if( db === undefined ){
-    fs.readFile('elments.js','utf8',(err,data)=>{
-      db = JSON.parse( data );
-      console.log( db );
-    });
-  }
-  if ( isNaN(element) ){
-		var e = db.elements.find( (a)=>{
-      return a.name.toLowerCase()==element.toLowerCase() || a.symbol.toLowerCase()==element.toLowerCase();
-    });
-  	if( e===undefined ) return "element not found";
-    els = e.number;
-    console.log( e );
-  } else {
-    var e = db.elements.find( (a)=>{
-      return a.number==element;
-    });
-  	if( e===undefined ) return "element not found";
-		console.log( e );
-    els = element;
-  }
+
+	var els, e;
+	if( typeof elements !== 'undefined' ){
+		var db = elements;
+	} else {
+	//	var db = {};
+	}
+	if( typeof element === 'undefined' ) return "Help me help you; give me something to go on. i.e. 'C', or 'oxygen' or 23";
+	if( buffer === "" || buffer == undefined ){
+		console.log( "There is no database to look at... Uhm try downloading one called elements.js and putting it here." );
+	} else {
+
+		var db = {};
+		db = JSON.parse( buffer );
+		//console.log( JSON.stringify( db.elements ) ); //db = JSON.parse( data );
+	}
+	// console.log( element );
+	if ( isNaN(element) ){
+		e = db.elements.find( (a)=>{
+			return a.name.toLowerCase()==element.toLowerCase() || a.symbol.toLowerCase()==element.toLowerCase();
+		});
+		if( e===undefined ) return "element not found";
+		els = e.number;
+		//console.log( e );
+	} else {
+		e = db.elements.find( (a)=>{
+			return a.number==element; });
+		if( e===undefined ) return "element not found";
+		//console.log( e );
+		els = element;
+	}
   let pat = [
     {'1s':2},
     {'2s':2},
@@ -48,10 +61,13 @@ var ec = function( element ){
     } else if( els > 0 ){
       let ee = "";
       for( i=0;i<c[p]-els;i++ ){ ee+='+'; }
-      config.push(p+''+els+''+ee);
+      config.push(p+''+els);
+	    e["positive_charge"] = c[p]-els;
       els = 0;
     }
   });
-  return config.sort((a,b)=>a.charCodeAt(0)-b.charCodeAt(0)).join(" ");
+  e["configuration"]= config.sort((a,b)=>a.charCodeAt(0)-b.charCodeAt(0)).join(" ");
+	return e;
 }
 
+console.log( ec( args[2] ) );
