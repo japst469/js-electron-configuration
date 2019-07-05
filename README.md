@@ -1,5 +1,5 @@
 # js-electron-configuration
-javascript utility to get an atom's electron configuration as a string.
+javascript utility to get an atom's electron configuration as a string and some other useful atomic information.
 
 
 
