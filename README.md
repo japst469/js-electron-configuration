@@ -5,8 +5,9 @@ javascript utility to get an atom's electron configuration as a string.
 
 usage :
 
-> node electron-configuration.js H
-{ name: 'Hydrogen',
+node electron-configuration.js H
+
+>{ name: 'Hydrogen',
   appearance: 'colorless gas',
   atomic_mass: 1.008,
   boil: 20.271,
